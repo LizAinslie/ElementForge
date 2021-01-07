@@ -1,0 +1,22 @@
+{
+  "name": "@synapsetech/elementforge",
+  "version": "0.0.1",
+  "description": "A simple framework for creating custom elements.",
+  "main": "dist/element-forge.js",
+  "module": "src/index.js",
+  "repository": "https://github.com/SynapseTech/ElementForge.git",
+  "author": "Synapse Technologies, LLC <support@synapsetech.dev> (https://synapsetech.dev)",
+  "license": "MIT",
+  "devDependencies": {
+    "webpack": "^5.11.1",
+    "webpack-cli": "^4.3.1",
+    "webpack-dev-server": "^3.11.1"
+  },
+  "scripts": {
+    "build": "webpack",
+    "prepublishOnly": "yarn build"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  }
+}
