@@ -1,0 +1,49 @@
+name: Publish Node.js Package
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+
+      - name: Install Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+
+      - name: Build Library
+        run: yarn build
+
+  publish-gpr:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+          registry-url: https://npm.pkg.github.com/
+
+      - name: Switch to Yarn Berry
+        run: yarn set version berry
+
+      # Below is some next level bash magic.
+      - name: Scaffold a yarnrc
+        run: |
+          cat <<EOF > ~/.yarnrc.yml
+          npmScopes:
+            synapsetech:
+              npmAuthToken: ${{ secrets.GITHUB_TOKEN }}
+              npmRegistryServer: https://npm.pkg.github.com
+          EOF
+
+      - name: Publish Package
+        run: yarn npm publish --access public
